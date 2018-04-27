@@ -19,12 +19,13 @@ ENV PATH /aerospike:$PATH
 
 RUN \
   apt-get update -y \
-  && apt-get install -y python wget logrotate ca-certificates python-dev python-setuptools python-argparse python-bcrypt openssl python-openssl  \
+  && apt-get install -y python wget logrotate ca-certificates python-dev python-setuptools python-argparse python-bcrypt openssl python-openssl python-pip \
+  && pip install pyOpenSSL pyasn1 toml jsonschema \
   && wget "https://www.aerospike.com/artifacts/aerospike-tools/${AEROSPIKE_VERSION}/aerospike-tools-${AEROSPIKE_VERSION}-ubuntu16.04.tgz" -O aerospike-tools.tgz \
   && echo "$AEROSPIKE_SHA256 *aerospike-tools.tgz" | sha256sum -c - \
   && mkdir aerospike \
   && tar xzf aerospike-tools.tgz --strip-components=1 -C aerospike \
-  && apt-get purge -y --auto-remove wget ca-certificates 
+  && apt-get purge -y --auto-remove wget ca-certificates
 
 
 RUN ls /aerospike/aerospike && dpkg -i /aerospike/aerospike/aerospike-tools-*.ubuntu16.04.x86_64.deb \
